@@ -1,0 +1,1 @@
+The sequence diagrams are based on the provided diagram, with modifications to reflect what was asked by the question.
