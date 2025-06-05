@@ -1,7 +1,12 @@
 import { useState } from 'react'
 
 const StasticsLine = ({text, value}) => {
-  return <p>{text}: {value}</p>
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  );
 }
 
 const Statistics = ({stats}) => {
@@ -11,14 +16,16 @@ const Statistics = ({stats}) => {
     return <p>No Feedback Given</p>
 
   return (
-    <>
-      <StasticsLine text="Good" value={good}></StasticsLine>
-      <StasticsLine text="Neutral" value={neutral}></StasticsLine>
-      <StasticsLine text="Bad" value={bad}></StasticsLine>
-      <StasticsLine text="Total" value={total}></StasticsLine>
-      <StasticsLine text="Average" value={average}></StasticsLine>
-      <StasticsLine text="Positive Feedback" value={positivefeedback}></StasticsLine>
-    </>
+    <table>
+      <tbody>
+        <StasticsLine text="Good" value={good}></StasticsLine>
+        <StasticsLine text="Neutral" value={neutral}></StasticsLine>
+        <StasticsLine text="Bad" value={bad}></StasticsLine>
+        <StasticsLine text="Total" value={total}></StasticsLine>
+        <StasticsLine text="Average" value={average}></StasticsLine>
+        <StasticsLine text="Positive Feedback" value={positivefeedback}></StasticsLine>
+      </tbody>
+    </table>
   )
 }
 
