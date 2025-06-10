@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -48,27 +51,31 @@ const App = () => {
 
   const matchedPerson = persons.find((person) => person.name === searchName)
 
+  const filterProps = {
+    searchInput,
+    handleSearchInputChange,
+    setSearchPerformed : searchPerformed,
+    matchedPerson,
+    searchName,
+    handleSearchClick
+  }
+
+  const personFormProps = {
+    addName,
+    newName,
+    handleNameChange,
+    newNumber,
+    handleNumberChange
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with: <input type="text" placeholder='Enter name here' value={searchInput} onChange={handleSearchInputChange} required/>
-        <button onClick={handleSearchClick}>Search</button>
-        {setSearchPerformed && matchedPerson && (<p>{matchedPerson.name} {matchedPerson.number}</p>)}
-        {setSearchPerformed && !matchedPerson && searchName && (<p>No matches found.</p>)}
-      </div>
+        <Filter {...filterProps}></Filter>
       <h2>Add phone numbers</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input type="text" placeholder='Enter name here' value={newName} onChange={handleNameChange} required/>
-        </div>
-        <div>
-          number: <input type="tel" placeholder='Enter number here' value={newNumber} onChange={handleNumberChange} required/>
-        </div>
-          <button type="submit">add</button>
-      </form>
+        <PersonForm {...personFormProps}></PersonForm>
       <h2>Numbers</h2>
-      {persons.map((person, index) => <p key={index}>{person.name} {person.number}</p>)}
+      <Persons persons={persons}></Persons>
     </div>
   )
 }
