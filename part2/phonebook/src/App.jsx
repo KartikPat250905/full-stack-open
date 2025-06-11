@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1234567'}
-  ]) 
+  const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
   const[newNumber, setNewNumber] = useState('')
@@ -14,6 +13,15 @@ const App = () => {
   const[searchInput, setSearchInput] = useState('')
   const [searchPerformed, setSearchPerformed] = useState(false);
 
+
+  useEffect(() => {
+    console.log("Fetching data from the server")
+    axios.get("http://localhost:3001/persons")
+         .then((response) => {
+            let data = response.data
+            setPersons(data)
+         })
+  }, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
