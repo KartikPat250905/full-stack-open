@@ -34,9 +34,10 @@ const App = () => {
 
   const handlePersonDeletion = (id) => {
     const personToDelete = persons.find((person) => id === person.id)
-    window.confirm(`Are you sure you want to delete ${personToDelete.name}?`)
-    personService.deletePerson(id)
-                .then(() => setPersons(person => person.filter(p => p.id !== id)))
+    if (window.confirm(`Are you sure you want to delete ${personToDelete.name}?`)){
+      personService.deletePerson(id)
+                   .then(() => setPersons(person => person.filter(p => p.id !== id)))
+    }
   }
 
   const handleSearchClick = (_) => {
@@ -58,12 +59,20 @@ const App = () => {
     {
       const nameObj = { name: newName , number: newNumber}
       personService.create(nameObj)
-                   .then((note) => setPersons(persons.concat(note)))
-      setNewName("")
-      setNewNumber("")
+                   .then((newObj) => setPersons(persons.concat(newObj)))
     }
     else
-      alert(`${newName} is already added to phonebook`)
+    {
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`))
+      {
+        const updatedObj = {...similarNames[0], number : newNumber}
+        console.log(similarNames)
+        personService.update(similarNames[0].id, updatedObj)
+                    .then((updatedPerson) => setPersons(persons.map(p => p.name === updatedPerson.name ? updatedPerson : p)))
+      }
+    }
+    setNewName("")
+    setNewNumber("")
   }
 
   const matchedPerson = persons.find((person) => person.name === searchName)
