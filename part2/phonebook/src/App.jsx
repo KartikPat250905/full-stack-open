@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
+import personService from './services/persons.js'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -16,10 +17,10 @@ const App = () => {
 
   useEffect(() => {
     console.log("Fetching data from the server")
-    axios.get("http://localhost:3001/persons")
-         .then((response) => {
-            let data = response.data
-            setPersons(data)
+    personService
+         .getAll()
+         .then((initialData) => {
+            setPersons(initialData)
          })
   }, [])
 
@@ -48,8 +49,9 @@ const App = () => {
     const similarNames = persons.filter((person) => newName === person.name)
     if (!similarNames.length)
     {
-      const nameObj = { name: newName , number: newNumber, id: persons.length}
-      setPersons(persons.concat(nameObj))
+      const nameObj = { name: newName , number: newNumber}
+      personService.create(nameObj)
+                   .then((note) => setPersons(persons.concat(note)))
       setNewName("")
       setNewNumber("")
     }
