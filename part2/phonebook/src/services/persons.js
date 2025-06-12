@@ -10,7 +10,7 @@ const create = (newObj) => {
     const request = axios.post(baseUrl, newObj)
     return(
         request.then((response) => response.data)
-    )
+    ) 
 }
 
 const update = (id, newObj) => {
