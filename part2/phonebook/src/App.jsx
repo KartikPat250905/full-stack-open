@@ -4,6 +4,7 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
 import personService from './services/persons.js'
+import Notification from './components/Notification.jsx'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,8 +13,8 @@ const App = () => {
   const[newNumber, setNewNumber] = useState('')
   const[searchName, setSearchName] = useState('')
   const[searchInput, setSearchInput] = useState('')
-  const [searchPerformed, setSearchPerformed] = useState(false);
-
+  const [searchPerformed, setSearchPerformed] = useState(false)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     console.log("Fetching data from the server")
@@ -60,6 +61,8 @@ const App = () => {
       const nameObj = { name: newName , number: newNumber}
       personService.create(nameObj)
                    .then((newObj) => setPersons(persons.concat(newObj)))
+      setNotification(`Added ${newName}`)
+      setTimeout(() => setNotification(null), 4000)
     }
     else
     {
@@ -69,6 +72,8 @@ const App = () => {
         console.log(similarNames)
         personService.update(similarNames[0].id, updatedObj)
                     .then((updatedPerson) => setPersons(persons.map(p => p.name === updatedPerson.name ? updatedPerson : p)))
+        setNotification(`Changed the contact number for ${newName}`)
+        setTimeout(() => setNotification(null), 4000)
       }
     }
     setNewName("")
@@ -97,6 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+        <Notification message={notification} error={false}></Notification>
         <Filter {...filterProps}></Filter>
       <h2>Add phone numbers</h2>
         <PersonForm {...personFormProps}></PersonForm>
