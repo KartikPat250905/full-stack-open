@@ -15,12 +15,24 @@ const App = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     console.log("Fetching data from the server");
-    personService.getAll().then((initialData) => {
-      setPersons(initialData);
-    });
+    personService
+      .getAll()
+      .then((initialData) => {
+        setPersons(initialData);
+      })
+      .catch((error) => {
+        setNotification(`Error fetching data from the server`);
+        console.log("Error fetching data:", error);
+        setError(true);
+        setTimeout(() => {
+          setNotification(null);
+          setError(false);
+        }, 4000);
+      });
   }, []);
 
   const handleNameChange = (event) => {
@@ -38,7 +50,16 @@ const App = () => {
     ) {
       personService
         .deletePerson(id)
-        .then(() => setPersons((person) => person.filter((p) => p.id !== id)));
+        .then(() => setPersons((person) => person.filter((p) => p.id !== id)))
+        .catch((error) => {
+          setNotification(`Error occured with deletion`);
+          console.log("Error deletion:", error);
+          setError(true);
+          setTimeout(() => {
+            setNotification(null);
+            setError(false);
+          }, 4000);
+        });
     }
   };
 
@@ -61,9 +82,20 @@ const App = () => {
       const nameObj = { name: newName, number: newNumber };
       personService
         .create(nameObj)
-        .then((newObj) => setPersons(persons.concat(newObj)));
-      setNotification(`Added ${newName}`);
-      setTimeout(() => setNotification(null), 4000);
+        .then((newObj) => {
+          setPersons(persons.concat(newObj));
+          setNotification(`Added ${newName}`);
+          setError(false);
+          setTimeout(() => setNotification(null), 4000);
+        })
+        .catch((error) => {
+          setNotification(`Failed to add ${newName} to the server`);
+          setError(true);
+          setTimeout(() => {
+            setNotification(null);
+            setError(false);
+          }, 4000);
+        });
     } else {
       if (
         window.confirm(
@@ -74,15 +106,28 @@ const App = () => {
         console.log(similarNames);
         personService
           .update(similarNames[0].id, updatedObj)
-          .then((updatedPerson) =>
+          .then((updatedPerson) => {
             setPersons(
               persons.map((p) =>
                 p.name === updatedPerson.name ? updatedPerson : p
               )
-            )
-          );
-        setNotification(`Changed the contact number for ${newName}`);
-        setTimeout(() => setNotification(null), 4000);
+            );
+            setNotification(`Changed the contact number for ${newName}`);
+            setTimeout(() => setNotification(null), 4000);
+          })
+          .catch((error) => {
+            setNotification(
+              `Information of ${newName} has already been removed from the server`
+            );
+            setPersons(
+              persons.filter((person) => person.id !== similarNames[0].id)
+            );
+            setError(true);
+            setTimeout(() => {
+              setNotification(null);
+              setError(false);
+            }, 4000);
+          });
       }
     }
     setNewName("");
@@ -111,7 +156,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} error={false}></Notification>
+      <Notification message={notification} error={error}></Notification>
       <Filter {...filterProps}></Filter>
       <h2>Add phone numbers</h2>
       <PersonForm {...personFormProps}></PersonForm>
