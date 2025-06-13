@@ -1,15 +1,11 @@
-import '../assets/Error.css'
+import "../assets/Error.css";
 
 const Notification = ({ message, error }) => {
-    if (message === null) {
-      return null
-    }
-  
-    return (
-      <div className={error ? 'error' : 'message'}>
-        {message}
-      </div>
-    )
+  if (message === null) {
+    return null;
   }
 
-export default Notification
+  return <div className={error ? "error" : "message"}>{message}</div>;
+};
+
+export default Notification;
