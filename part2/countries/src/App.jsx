@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import countryService from "./services/Countries";
 import CountryInfo from "./components/CountryInfo";
+import RelevantCountries from "./components/RelevantCountries";
 
 function App() {
   const [value, setValue] = useState("");
@@ -24,7 +25,12 @@ function App() {
       country.name.common.toLowerCase().includes(value.toLowerCase())
     );
   };
-  
+
+  const handleShowCountry = (country) => {
+    setRelevantCountries(null);
+    setCountry(country);
+    setValue("");
+  };
 
   const handleChange = (event) => {
     const currentValue = event.target.value;
@@ -49,10 +55,12 @@ function App() {
     <>
       <p>fetch countries: </p>
       <input type="text" value={value} onChange={handleChange} />
-      {relevantCountries &&
-        relevantCountries.map((country) => (
-          <p key={country.name.common}>{country.name.common}</p>
-        ))}
+      {relevantCountries && (
+        <RelevantCountries
+          relevantCountries={relevantCountries}
+          onClick={handleShowCountry}
+        ></RelevantCountries>
+      )}
       {country && <CountryInfo country={country}></CountryInfo>}
     </>
   );
