@@ -6,3 +6,12 @@ Content-Type: application/json
 
 ### Get all entries after deletion
 GET http://localhost:3001/api/persons
+
+### Add a new phonebook entry
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Alice Johnson",
+  "number": "555-1234"
+}

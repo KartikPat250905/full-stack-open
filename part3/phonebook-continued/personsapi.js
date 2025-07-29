@@ -48,8 +48,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const person = request.body;
-  const Maxid = persons.length > 0 ? persons.length : 0
-  person.id = Maxid + 1
+  person.id = Math.floor(Math.random() * 1_000_000);
   persons = persons.concat(person)
   response.json(person)
 })
