@@ -12,6 +12,28 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-  "name": "Alice Johnson",
-  "number": "555-1234"
+  "name" : "Kartik",
+  "number": "040-123456"
+}
+
+###
+
+### Add a entry with missing fields
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "number": "040-123456"
+}
+
+
+###
+
+### Add a entry with existing name
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas", 
+  "number": "040-123456"
 }

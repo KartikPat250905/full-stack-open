@@ -43,13 +43,24 @@ app.get('/api/persons/:id', (request, response) => {
   if (targetPerson)
     response.json(targetPerson)
   else
-    response.status(404).send({error: 'Note not found'})
+    response.status(404).send({error: 'Person not found'})
 })
 
 app.post('/api/persons', (request, response) => {
   const person = request.body;
+  console.log(person)
+  if (!person.name || !person.number)
+  {
+    response.status(400).send({error: 'Missing name or number field'})
+    return;
+  }
+  const similarNumber = persons.find((p) => person.name === p.name)
+  if (similarNumber)
+  {
+    response.status(400).send({ error: 'name must be unique' })
+    return;
+  }
   person.id = Math.floor(Math.random() * 1_000_000);
-  
   persons = persons.concat(person)
   response.json(person)
 })
