@@ -1,0 +1,8 @@
+### Delete a specific persons entry
+DELETE http://localhost:3001/api/persons/1
+Content-Type: application/json
+
+###
+
+### Get all entries after deletion
+GET http://localhost:3001/api/persons
