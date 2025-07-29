@@ -1,6 +1,5 @@
 import express, { response } from 'express';
 import cors from 'cors';
-import { error } from 'console';
 
 const app = express()
 app.use(express.json());
@@ -59,6 +58,11 @@ app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
   persons = persons.filter((person) => person.id !== id)
   response.status(204).end()
+})
+
+app.get('/info', (request, response) => {
+    const totalNumbers = persons.length > 0 ? persons.length : 0
+    response.send(`<p>Phonebook has info for ${totalNumbers}</p><p>${new Date().toString()}</p>`)
 })
 
 const PORT = 3001;

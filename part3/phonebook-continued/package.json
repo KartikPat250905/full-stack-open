@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
+    "start": "node personsapi.js",
+    "dev": "node --watch personsapi.js",
     "dev:frontend": "vite",
     "build": "vite build",
     "lint": "eslint .",
